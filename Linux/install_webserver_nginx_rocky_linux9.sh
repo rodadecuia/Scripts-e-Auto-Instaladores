@@ -104,46 +104,28 @@ EOL
 
 # Menu de opções
 echo "Selecione a opção de instalação:"
-echo "1. Atualizar o sistema"
-echo "2. Instalar MySQL/MariaDB"
-echo "3. Instalar Nginx"
-echo "4. Instalar PHP 8.3"
-echo "5. Instalar PhpMyAdmin"
-echo "6. Configurar firewall"
-echo "7. Instalar tudo"
-echo "8. Adicionar novo vhost no Nginx"
+echo "1. Instalar servidor web (Nginx, PHP, MySQL/MariaDB)"
+echo "2. Instalar PhpMyAdmin"
+echo "3. Adicionar novo vhost no Nginx"
+echo "4. Gerar certificados SSL"
 
-read -p "Digite a opção desejada [1-8]: " option
+read -p "Digite a opção desejada [1-4]: " option
 
 case $option in
     1)
         update_system
+        install_nginx
+        install_php
+        install_mariadb
         ;;
     2)
-        install_mariadb
+        install_phpmyadmin
         ;;
     3)
-        install_nginx
+        add_vhost
         ;;
     4)
-        install_php
-        ;;
-    5)
-        install_phpmyadmin
-        ;;
-    6)
-        configure_firewall
-        ;;
-    7)
-        update_system
-        install_mariadb
-        install_nginx
-        install_php
-        install_phpmyadmin
-        configure_firewall
-        ;;
-    8)
-        add_vhost
+        install_certbot
         ;;
     *)
         echo "Opção inválida!"
