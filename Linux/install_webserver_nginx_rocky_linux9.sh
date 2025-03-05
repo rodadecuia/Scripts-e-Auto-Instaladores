@@ -1,5 +1,17 @@
 #!/bin/bash
 
+echo "Este script é desenvolvido pelo Departamento de TI da empresa Roda de Cuia."
+echo "Qualquer utilização do mesmo implica na aceitação dos termos e políticas presentes em https://rodadecuia.com.br."
+echo "IMPORTANTE: A utilização é de inteira responsabilidade sua."
+
+# Validação de confirmação
+read -p "Estou ciente que a utilização desta instalação pode apagar meus dados já presentes em meu servidor, e que é de minha total responsabilidade fazer backups? (sim/não): " confirm
+
+if [[ "$confirm" != "sim" ]]; then
+    echo "Muito obrigado, infelizmente não podemos continuar com a instalação."
+    exit 1
+fi
+
 # Função para atualizar o sistema
 update_system() {
     sudo dnf update -y
