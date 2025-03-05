@@ -4,6 +4,12 @@ echo "Este script é desenvolvido pelo Departamento de TI da empresa Roda de Cui
 echo "Qualquer utilização do mesmo implica na aceitação dos termos e políticas presentes em https://rodadecuia.com.br."
 echo "IMPORTANTE: A utilização é de inteira responsabilidade sua."
 
+# Validação do sistema operacional
+if ! grep -q "Rocky Linux 9" /etc/os-release; then
+    echo "Este script é compatível somente com o Rocky Linux 9."
+    exit 1
+fi
+
 # Validação de confirmação
 read -p "Estou ciente que a utilização desta instalação pode apagar meus dados já presentes em meu servidor, e que é de minha total responsabilidade fazer backups? (sim/não): " confirm
 
@@ -102,34 +108,47 @@ EOL
     echo "Vhost para $domain criado com sucesso!"
 }
 
-# Menu de opções
-echo "Selecione a opção de instalação:"
-echo "1. Instalar servidor web (Nginx, PHP, MySQL/MariaDB)"
-echo "2. Instalar PhpMyAdmin"
-echo "3. Adicionar novo vhost no Nginx"
-echo "4. Gerar certificados SSL"
+# Função para exibir o menu de opções
+show_menu() {
+    echo -e "\e[32mSelecione a opção de instalação:\e[0m"
+    echo -e "\e[34m1. Instalar servidor web (Nginx, PHP, MySQL/MariaDB)\e[0m"
+    echo -e "\e[34m2. Instalar PhpMyAdmin\e[0m"
+    echo -e "\e[34m3. Adicionar novo vhost no Nginx\e[0m"
+    echo -e "\e[34m4. Gerar certificados SSL\e[0m"
 
-read -p "Digite a opção desejada [1-4]: " option
+    read -p "Digite a opção desejada [1-4]: " option
 
-case $option in
-    1)
-        update_system
-        install_nginx
-        install_php
-        install_mariadb
-        ;;
-    2)
-        install_phpmyadmin
-        ;;
-    3)
-        add_vhost
-        ;;
-    4)
-        install_certbot
-        ;;
-    *)
-        echo "Opção inválida!"
-        ;;
-esac
+    case $option in
+        1)
+            update_system
+            install_nginx
+            install_php
+            install_mariadb
+            ;;
+        2)
+            install_phpmyadmin
+            ;;
+        3)
+            add_vhost
+            ;;
+        4)
+            install_certbot
+            ;;
+        *)
+            echo "Opção inválida!"
+            ;;
+    esac
 
-echo "Processo concluído!"
+    echo "Processo concluído!"
+}
+
+# Loop para continuar instalando novas aplicações
+while true; do
+    show_menu
+    read -p "Deseja instalar novas aplicações? (sim/não): " continue_install
+
+    if [[ "$continue_install" != "sim" ]]; then
+        echo "Muito obrigado! O script será finalizado."
+        break
+    fi
+done
