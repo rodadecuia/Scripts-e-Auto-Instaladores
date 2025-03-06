@@ -32,6 +32,8 @@ install_mariadb() {
 
 # Função para instalar Nginx
 install_nginx() {
+    echo "Instalando nginx..."
+    sudo dnf update -y
     sudo dnf install -y nginx
     sudo systemctl enable nginx
     sudo systemctl start nginx
@@ -55,6 +57,8 @@ install_phpmyadmin() {
 
 # Função para instalar Certbot
 install_certbot() {
+    echo "Instalando Certbot..."
+    sudo dnf update -y
     sudo dnf install -y certbot python3-certbot-nginx
 }
 
@@ -102,6 +106,12 @@ EOL
 
     sudo nginx -t && sudo systemctl reload nginx
 
+    # Verifica se o Certbot está instalado
+    if ! command -v certbot &> /dev/null
+    then
+        install_certbot
+    fi
+
     # Gerar certificado SSL usando Certbot
     sudo certbot --nginx -d $domain
 
@@ -124,6 +134,11 @@ show_menu() {
             install_nginx
             install_php
             install_mariadb
+            # Verifica se o Certbot está instalado
+            if ! command -v certbot &> /dev/null
+            then
+                install_certbot
+            fi
             ;;
         2)
             install_phpmyadmin
@@ -132,7 +147,11 @@ show_menu() {
             add_vhost
             ;;
         4)
-            install_certbot
+            # Verifica se o Certbot está instalado
+            if ! command -v certbot &> /dev/null
+            then
+                install_certbot
+            fi
             ;;
         *)
             echo "Opção inválida!"
