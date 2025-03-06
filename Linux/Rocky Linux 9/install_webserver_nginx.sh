@@ -43,7 +43,7 @@ install_php() {
     sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm
     sudo dnf module reset php -y
     sudo dnf module enable php:remi-8.3 -y
-    sudo dnf install -y php php-fpm php-mysqlnd
+    sudo dnf install -y php php-fpm php-mysqlnd php-redis  php-curl  php-json  php-gd  php-xml  php-mbstring  php-zip
     sudo systemctl enable php-fpm
     sudo systemctl start php-fpm
 }
